@@ -76,7 +76,11 @@ export async function buildApp(opts: BuildOptions) {
     }
   });
 
-  await app.register(cors, { origin: config.corsOrigins, credentials: true });
+  await app.register(cors, {
+    origin: config.corsOrigins,
+    credentials: true,
+    methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  });
   await app.register(jwt, { secret: config.jwtSecret, sign: { expiresIn: "30d" } });
   await app.register(rateLimit, { global: false, allowList: () => !!opts.disableRateLimit });
 
