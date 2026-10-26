@@ -11,20 +11,23 @@ export interface Config {
   termiiApiKey: string | null;
   termiiSenderId: string;
   adminPhones: string[];
-  /** Fixed OTP for automated tests only. Never set in production. */
+  /** Fixed OTP for automated tests and the demo deploy. Never set in production. */
   testOtpCode: string | null;
   isProduction: boolean;
 }
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
-  const isProduction = env.NODE_ENV === "production";
+  // DEMO_MODE is the test deploy: fixed login code and the test checkout, no real money or SMS.
+  const isProduction = env.NODE_ENV === "production" && env.DEMO_MODE !== "true";
   const jwtSecret = env.JWT_SECRET ?? (isProduction ? "" : "dev-secret-not-for-production");
   if (!jwtSecret || (isProduction && jwtSecret.length < 32)) {
     throw new Error("JWT_SECRET must be set to at least 32 characters in production");
   }
-  const webUrl = (env.WEB_URL ?? "http://localhost:3000").replace(/\/$/, "");
+  // RENDER_EXTERNAL_URL is set by Render, so the one-click deploy needs no URL settings.
+  const webUrl = (env.WEB_URL ?? env.RENDER_EXTERNAL_URL ?? "http://localhost:3000").replace(/\/$/, "");
   return {
-    port: Number(env.PORT ?? 4000),
+    // API_PORT lets the API share a host with the web app, which takes PORT.
+    port: Number(env.API_PORT ?? env.PORT ?? 4000),
     databaseUrl: env.DATABASE_URL ?? "postgres://billy:billy@localhost:5432/billy",
     jwtSecret,
     webUrl,

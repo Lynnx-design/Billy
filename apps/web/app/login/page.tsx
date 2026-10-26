@@ -148,6 +148,11 @@ export default function LoginPage() {
                 </span>
               </label>
             )}
+            {process.env.NEXT_PUBLIC_DEMO_MODE === "true" && (
+              <p className="rounded-2xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                Test version: no SMS is sent. Your code is <strong>123456</strong>.
+              </p>
+            )}
             <ErrorText>{error}</ErrorText>
             <button className="btn-primary w-full" disabled={busy || code.length !== 6}>
               {busy ? <Spinner className="border-white/40 border-t-white" /> : "Continue"}

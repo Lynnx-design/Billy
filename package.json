@@ -10,6 +10,7 @@
     "db:migrate": "pnpm --filter @billy/api db:migrate",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
-    "build": "pnpm -r build"
+    "build": "pnpm -r build",
+    "start:demo": "sh scripts/start-demo.sh"
   }
 }

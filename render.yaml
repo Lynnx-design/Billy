@@ -1,0 +1,39 @@
+# One-click test deploy on Render: the app and a Postgres database on the free plan.
+# Runs in test mode: login code is always 123456 and payments use the test checkout (no real money).
+services:
+  - type: web
+    name: billy
+    runtime: node
+    plan: free
+    buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter @billy/web build
+    startCommand: pnpm start:demo
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: billy-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEMO_MODE
+        value: "true"
+      - key: NEXT_PUBLIC_DEMO_MODE
+        value: "true"
+      - key: TEST_OTP_CODE
+        value: "123456"
+      - key: NEXT_PUBLIC_API_URL
+        value: /api
+      - key: API_URL
+        value: http://localhost:4000
+      - key: API_PROXY_TARGET
+        value: http://localhost:4000
+      - key: ADMIN_PHONES
+        sync: false
+
+databases:
+  - name: billy-db
+    plan: free
+    databaseName: billy
+    user: billy

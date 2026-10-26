@@ -23,6 +23,12 @@ apps/web       Next.js 15 web app (mobile-first, Tailwind, pink theme)
 packages/shared  Types, validation, templates and money helpers used by both
 ```
 
+## Try it online (test version)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Lynnx-design/Billy)
+
+`render.yaml` sets up the app and a Postgres database on Render's free plan in one go. It runs in **test mode**: the login code is always `123456` (no SMS is sent) and payments go through the test checkout, so no real money moves. Free services sleep when idle, so the first visit can take about a minute to wake up.
+
 ## Run it locally
 
 Needs Node 22, pnpm 10 and PostgreSQL 16.
